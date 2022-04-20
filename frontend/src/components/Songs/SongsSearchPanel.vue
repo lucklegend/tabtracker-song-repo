@@ -1,0 +1,43 @@
+<template>
+  <panel title="Search">
+    <v-text-field
+      label="Search by title artist, album, or genre"
+      placeholder="Search by title artist, album, or genre"
+      v-model="search"
+    />
+  </panel>
+</template>
+
+<script>
+import _ from 'lodash'
+export default {
+  data () {
+    return {
+      search: null
+    }
+  },
+  watch: {
+    search: _.debounce(async function (value) {
+      const route = {
+        name: 'songs'
+      }
+      if (this.search !== '') {
+        route.query = {
+          search: this.search
+        }
+      }
+      this.$router.push(route)
+    }, 700),
+    '$route.query.search': {
+      immediate: true,
+      handler (value) {
+        this.search = value
+      }
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>
